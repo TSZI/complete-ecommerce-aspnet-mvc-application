@@ -1,0 +1,63 @@
+﻿@model Actor
+
+@{
+	ViewData["Title"] = "Add a new actor";
+}
+
+<div class="row text">
+	<div class="col-md-8 offset-2">
+		<p>
+			<h1>Add a New Actor</h1>
+		</p>
+		<div class="row">
+			<div class="col-md-8 offset-2">
+				<form asp-action="Create">
+					<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+					<div class="form-group text-center">
+						<img class="border-info rounded-circle max-w-150" id="ProfilePicturePreview" />
+					</div>
+					<div class="form-group">
+						<label asp-for="ProfilePictureURL" class="control-label"></label>
+						<input asp-for="ProfilePictureURL" class="form-control" />
+						<span asp-validation-for="ProfilePictureURL" class="text-danger"></span>
+					</div>
+					<div class="form-group">
+						<label asp-for="FullName" class="control-label"></label>
+						<input asp-for="FullName" class="form-control" />
+						<span asp-validation-for="FullName" class="text-danger"></span>
+					</div>
+					<div class="form-group">
+						<label asp-for="Bio" class="control-label"></label>
+						<input asp-for="Bio" class="form-control" />
+						<span asp-validation-for="Bio" class="text-danger"></span>
+					</div>
+					<div class="form-group">
+						<input type="submit" value="Create" class="btn btn-outline-success float-right" />
+						<a class="btn btn-outline-secondary" asp-action="Index">Show All</a>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+
+@section Scripts{
+	<script>
+		const profileUrl = document.getElementById("ProfilePictureURL");
+
+		document.addEventListener("DOMContentLoaded", LoadPic, false);
+
+		profileUrl.addEventListener("change", (event) => {
+			LoadPic();
+		});
+
+		function LoadPic() {
+			const profileImage = document.getElementById('ProfilePicturePreview');
+			if (profileUrl) {
+				profileImage.src = profileUrl.value;
+			}
+		}
+
+	</script>
+}
