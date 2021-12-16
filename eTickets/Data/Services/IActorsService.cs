@@ -3,19 +3,22 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using eTickets.Data.Base;
 
 namespace eTickets.Data.Services
 {
-	public interface IActorsService
+	public interface IActorsService : IEntityBaseRepository<Actor>
 	{
-		Task<IEnumerable<Actor>> GetAllAsync();
+		// See Generic Base for the following implementation
 
-		Task<Actor> GetByIdAsync(int id);
+		//Task<IEnumerable<Actor>> GetAllAsync();
 
-		Task AddAsync(Actor actor);
+		//Task<Actor> GetByIdAsync(int id);
 
-		Task <Actor> UpdateAsync(int id, Actor newActor);
+		//Task AddAsync(Actor actor);
 
-		Task DeleteAsync(int id);
+		//Task <Actor> UpdateAsync(int id, Actor newActor);
+
+		//Task DeleteAsync(int id);
 	}
 }
