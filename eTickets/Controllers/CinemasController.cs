@@ -5,21 +5,22 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using eTickets.Data.Services;
 
 namespace eTickets.Controllers
 {
 	public class CinemasController : Controller
 	{
-		private readonly ApplicationDbContext _context;
+		private readonly ICinemasService _service;
 
-		public CinemasController(ApplicationDbContext context)
+		public CinemasController(ICinemasService service)
 		{
-			_context = context;
+			_service = service;
 		}
 
 		public async Task<IActionResult> Index()
 		{
-			var cinemas = await _context.Cinemas.ToListAsync();
+			var cinemas = await _service.GetAllAsync();
 			return View(cinemas);
 		}
 	}
