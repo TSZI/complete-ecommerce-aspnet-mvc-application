@@ -1,0 +1,88 @@
+﻿@*DEFINE MODEL*@
+@model Movie
+@*DEFINE VIEW DATA*@
+@{
+	ViewData["Title"] = "Movie Details";
+}
+
+@*HTML & CODE*@
+<div class="row">
+	<div class="col-md-8 offset-md-2 mb-3">
+		<div class="card mb-12">
+			<div class="row g-0">
+				<div class="col-md-12">
+					<div class="card-header text-white bg-info">
+						<p class="card-text">
+							<h5 class="card-title">
+								@Model.Name
+							</h5>
+						</p>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<img src="@Model.ImageURL" alt="@Model.Name" width="100%" />
+				</div>
+				<div class="col-md-8">
+					<div class="card-body">
+						<p class="card-text">@Model.Description</p>
+						<p class="card-text">
+							<strong>Cinema: </strong>
+							<a asp-controller="Cinemas" asp-action="Details" asp-route-id="@Model.CinemaId">
+								@Model.Cinema.Name
+							</a>
+						</p>
+						<p class="card-text">
+							<strong>Producer: </strong>
+							<a asp-controller="Producers" asp-action="Details" asp-route-id="@Model.ProducerId">
+								@Model.Producer.FullName
+							</a>
+						</p>
+						<p class="card-text"><strong>Start Date: </strong>@Model.StartDate.ToString("dd MMM yy")</p>
+						<p class="card-text"><strong>Start Date: </strong>@Model.EndDate.ToString("dd MMM yy")</p>
+						<p class="card-text">
+							<strong>Status: </strong>
+							@if (DateTime.Now >= Model.StartDate && DateTime.Now <= Model.EndDate)
+							{
+								<span class="badge bg-success text-white">AVAILABLE</span>
+							}
+							else if (DateTime.Now > Model.EndDate)
+							{
+								<span class="badge bg-danger text-white">EXPIRED</span>
+
+							}
+							else
+							{
+								<span class="badge bg-primary text-white">UPCOMING</span>
+							}
+						</p>
+						<p class="card-text">
+							<strong>Actors: </strong>
+							<hr />
+							<div class="row">
+								@foreach (var actor in Model.Actors_Movies)
+								{
+									<div class="col text-center">
+										<img class="border-info rounded-circle" src="@actor.Actor.ProfilePictureURL" style="max-width: 150px;" />
+										<br />
+										<a asp-controller="Actors" asp-action="Details" asp-route-id="@actor.ActorId">@actor.Actor.FullName</a>
+									</div>
+								}
+							</div>
+						</p>
+					</div>
+				</div>
+				<div class="col-md-12">
+					<div class="card-footer">
+						<p class="card-text">
+							<a class="btn btn-outline-primary float-right" asp-action="Index">
+								Back to List
+							</a>
+							<a class="btn btn-success text-white"><i class="bi bi-cart-plus"></i> Add to Cart (Price @Model.Price.ToString("c"))</a>
+						</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
