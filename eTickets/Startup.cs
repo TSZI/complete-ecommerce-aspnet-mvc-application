@@ -11,6 +11,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using eTickets.Data.Services;
+using Microsoft.AspNetCore.Http;
+using eTickets.Data.Cart;
 
 namespace eTickets
 {
@@ -26,12 +28,21 @@ namespace eTickets
 		// This method gets called by the runtime. Use this method to add services to the container.
 		public void ConfigureServices(IServiceCollection services)
 		{
+			// DbContext
 			services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("MyConnection")));
-			services.AddControllersWithViews();
+			
+			// Services Configuration
 			services.AddScoped<IActorsService, ActorsService>();
 			services.AddScoped<IProducersService, ProducersService>();
 			services.AddScoped<ICinemasService, CinemasService>();
 			services.AddScoped<IMoviesService, MoviesService>();
+			services.AddScoped<IOrdersService, OrdersService>();
+			services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+			services.AddScoped(sc => ShoppingCart.GetShoppingCart(sc));
+			
+			services.AddSession();
+			services.AddControllersWithViews();
+
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -49,10 +60,9 @@ namespace eTickets
 			}
 			app.UseHttpsRedirection();
 			app.UseStaticFiles();
-
 			app.UseRouting();
-
 			app.UseAuthorization();
+			app.UseSession();
 
 			app.UseEndpoints(endpoints =>
 			{
