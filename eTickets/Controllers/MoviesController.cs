@@ -8,9 +8,13 @@ using eTickets.Data;
 using eTickets.Data.Services;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using eTickets.Models;
+using Microsoft.AspNetCore.Authorization;
+using eTickets.Data.Static;
 
 namespace eTickets.Controllers
 {
+
+	[Authorize(Roles = UserRoles.Admin)]
 	public class MoviesController : Controller
 	{
 		private readonly IMoviesService _service;
@@ -22,12 +26,14 @@ namespace eTickets.Controllers
 			_context = context;
 		}
 
+		[AllowAnonymous]
 		public async Task<IActionResult> Index()
 		{
 			var movies = await _service.GetAllAsync(n => n.Cinema);
 			return View(movies);
 		}
 
+		[AllowAnonymous]
 		public async Task<IActionResult> Filter(string searchString)
 		{
 			var movies = await _service.GetAllAsync(n => n.Cinema);
@@ -43,6 +49,7 @@ namespace eTickets.Controllers
 		}
 
 		// GET: Movies/Details/1
+		[AllowAnonymous]
 		public async Task<IActionResult> Details(int id)
 		{
 			var movieDetail = await _service.GetMovieByIdAsync(id);

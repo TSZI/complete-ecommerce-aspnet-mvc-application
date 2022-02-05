@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using eTickets.Models;
+using Microsoft.AspNetCore.Identity;
+using eTickets.Data.Static;
 
 namespace eTickets.Data
 {
@@ -321,5 +323,49 @@ namespace eTickets.Data
 				}
 			}
 		}
+
+		public static async Task SeedUsersAndRolesAsync(IApplicationBuilder applicationBuilder)
+		{
+			using (var serviceScope = applicationBuilder.ApplicationServices.CreateScope())
+			{
+				// Roles
+				var roleManager = serviceScope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+
+				if (!await roleManager.RoleExistsAsync(UserRoles.Admin)) { await roleManager.CreateAsync(new IdentityRole(UserRoles.Admin)); }
+				if (!await roleManager.RoleExistsAsync(UserRoles.User)) { await roleManager.CreateAsync(new IdentityRole(UserRoles.User)); }
+
+				// Users
+				var userManager = serviceScope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+
+				// Admin
+				await CreateTheUser(userManager, UserRoles.Admin, new ApplicationUser()
+				{
+					FullName = "Admin User",
+					UserName = "admin-user",
+					Email = "admin@etickets.com"
+				}, "P@ssw0rd");
+
+				// User
+				await CreateTheUser(userManager, UserRoles.User, new ApplicationUser()
+				{
+					FullName = "Application User",
+					UserName = "app-user",
+					Email = "user@etickets.com"
+				}, "P@ssw0rd");
+
+			}
+
+		}
+
+		private static async Task CreateTheUser(UserManager<ApplicationUser> userManager, string userRole, ApplicationUser appUser, string userPassword)
+		{
+			var userObject = await userManager.FindByEmailAsync(appUser.Email);
+			if (userObject == null)
+			{
+				await userManager.CreateAsync(appUser, userPassword);
+				await userManager.AddToRoleAsync(appUser, userRole);
+			}
+		}
+
 	}
 }

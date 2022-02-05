@@ -1,9 +1,15 @@
 ﻿@model string;
 
-<div class="text-white row">
-	<div class="col">
-		<a asp-controller="@Model" asp-action="Create" class="btn btn-success float-right">
-			<i class="bi bi-plus-circle m-4"></i> Add New
-		</a>
+
+@if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+{
+
+	<div class="text-white row">
+		<div class="col">
+			<a asp-controller="@Model" asp-action="Create" class="btn btn-success float-right">
+				<i class="bi bi-plus-circle m-4"></i> Add New
+			</a>
+		</div>
 	</div>
-</div>
+
+}
