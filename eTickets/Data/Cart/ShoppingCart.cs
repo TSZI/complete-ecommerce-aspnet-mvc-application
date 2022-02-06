@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Session;
+using Microsoft.AspNetCore.Authorization;
 
 namespace eTickets.Data.Cart
 {
@@ -99,6 +100,8 @@ namespace eTickets.Data.Cart
 				.Where(n => n.ShoppingCartId == ShoppingCartId).ToListAsync();
 			_context.ShoppingCartItems.RemoveRange(items);
 			await _context.SaveChangesAsync();
+
+			ShoppingCartItems = new List<ShoppingCartItem>();
 		}
 	}
 }

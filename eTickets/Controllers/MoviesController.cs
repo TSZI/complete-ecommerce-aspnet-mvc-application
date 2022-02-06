@@ -40,8 +40,8 @@ namespace eTickets.Controllers
 
 			if (!string.IsNullOrEmpty(searchString))
 			{
-				var results = movies.Where(n => n.Name.ToLower().Contains(searchString) 
-								|| n.Description.ToLower().Contains(searchString)).ToList();
+				var results = movies.Where(n => n.Name.ToLower().Contains(searchString.ToLower()) 
+								|| n.Description.ToLower().Contains(searchString.ToLower())).ToList();
 				return View("Index", results);
 			}
 
